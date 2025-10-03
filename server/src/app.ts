@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
+import routes from "./routes";
 
 const app = express();
 
@@ -12,10 +13,9 @@ app.use(morgan("dev"));
 app.use(helmet());
 
 // Routes
-// app.use("/api", routes);
+app.use("/api", routes);
 app.get("/", (req, res) => res.json({ message: "API is running" }));
 
 // Error Handler
-
 
 export default app;
