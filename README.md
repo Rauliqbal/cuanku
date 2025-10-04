@@ -3,7 +3,7 @@
 **Kelola keuangan dengan cara yang seru dan gampang!**
 
 Cuanku adalah aplikasi manajemen keuangan pribadi untuk membantu kamu mencatat pemasukan, pengeluaran, dan mencapai tujuan finansial dengan lebih menyenangkan.  
-Kami percaya bahwa mengatur uang itu **nggak harus ribet**—Cuanku hadir untuk bikin semuanya lebih mudah dan seru. 🚀
+Saya percaya bahwa mengatur uang itu **nggak harus ribet** — Cuanku hadir untuk bikin semuanya lebih mudah dan seru. 🚀
 
 ---
 

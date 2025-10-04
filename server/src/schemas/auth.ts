@@ -14,7 +14,7 @@ export const registerSchema = z
 
 export const loginSchema = z
   .object({
-    email: z.email("Inimah bukan email lu bro!"),
+    email: z.email("Inimah bukan akun lu bro!"),
     password: z.string().min(6, "Password minimal 6"),
     confirmPassword: z.string(),
   })
