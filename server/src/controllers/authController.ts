@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { registerSchema } from "../schemas/auth";
+import { loginSchema, registerSchema } from "../schemas/auth";
 import { prisma } from "../config/db";
 import argon2 from "argon2";
 
@@ -37,7 +37,7 @@ export const register = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "Berhasil membuat akun",
-      data: register,
+      // data: register,
     });
   } catch (error) {
     res.status(500).json({
@@ -45,4 +45,24 @@ export const register = async (req: Request, res: Response) => {
       message: "Internal server error",
     });
   }
+};
+
+// LOGIN
+export const login = async (req: Request, res: Response) => {
+  const parse = loginSchema.safeParse(req.body);
+  if (!parse.success) {
+    return res.status(400).json({
+      errors: parse.error.flatten(),
+    });
+  }
+  const { email, password } = parse.data;
+
+  try {
+    const checkEmail = await prisma.user.findFirst({
+      where: { email },
+    });
+    if (!checkEmail) {
+      return res.json(404).json({ message: "Akun tidak ditemukan!" });
+    }
+  } catch (error) {}
 };
