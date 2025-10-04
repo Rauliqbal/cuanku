@@ -2,13 +2,14 @@ import { Request, Response } from "express";
 import { loginSchema, registerSchema } from "../schemas/auth";
 import { prisma } from "../config/db";
 import argon2 from "argon2";
+import { errorResponse, successResponse } from "../utils/response";
 
 // REGISTER
 export const register = async (req: Request, res: Response) => {
   const parse = registerSchema.safeParse(req.body);
   if (!parse.success) {
     return res.status(400).json({
-      errors: parse.error.flatten(),
+      errors: parse.error.flatten().fieldErrors,
     });
   }
 
@@ -16,17 +17,17 @@ export const register = async (req: Request, res: Response) => {
 
   try {
     // Cek User
-    const checkUser = await prisma.user.findFirst({
+    const user = await prisma.user.findUnique({
       where: { email },
     });
-    if (checkUser) {
-      return res.json(400).json({ message: "Email sudah dipakai" });
+    if (user) {
+      return errorResponse(res, "Email sudah digunakan", 400);
     }
 
     // Hash Password
     const hashed = await argon2.hash(password, { hashLength: 24 });
 
-    const register = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name,
         email,
@@ -34,11 +35,7 @@ export const register = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(200).json({
-      success: true,
-      message: "Berhasil membuat akun",
-      // data: register,
-    });
+    successResponse(res, "Berhasil membuat akun", 200);
   } catch (error) {
     res.status(500).json({
       error,
@@ -58,11 +55,18 @@ export const login = async (req: Request, res: Response) => {
   const { email, password } = parse.data;
 
   try {
-    const checkEmail = await prisma.user.findFirst({
+    // Cek User
+    const user = await prisma.user.findUnique({
       where: { email },
     });
-    if (!checkEmail) {
-      return res.json(404).json({ message: "Akun tidak ditemukan!" });
+    if (!user) {
+      return errorResponse(res, "Akun tidak ditemukan!", 404);
+    }
+
+    // Verify Password
+    const verifyPassword = await argon2.verify(user.password, password);
+    if (!verifyPassword) {
+      return errorResponse(res, "Password salah bro!");
     }
   } catch (error) {}
 };
