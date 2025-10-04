@@ -9,7 +9,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Cuanku - Hemat pangkal kaya",
+        name: "Cuanku - Nabung itu seru",
         short_name: "Cuanku",
         start_url: "/",
         display: "standalone",
