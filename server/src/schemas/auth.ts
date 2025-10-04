@@ -11,3 +11,14 @@ export const registerSchema = z
     message: "Password tidak sama!",
     path: ["confirmPassword"],
   });
+
+export const loginSchema = z
+  .object({
+    email: z.email("Inimah bukan email lu bro!"),
+    password: z.string().min(6, "Password minimal 6"),
+    confirmPassword: z.string(),
+  })
+  .refine((value) => value.password === value.confirmPassword, {
+    message: "Password tidak sama!",
+    path: ["confirmPassword"],
+  });
