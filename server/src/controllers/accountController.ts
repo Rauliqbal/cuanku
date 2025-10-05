@@ -30,3 +30,16 @@ export const createAccount = async (req: Request, res: Response) => {
 
   return successResponse(res, "Berhasil dibuat", 200);
 };
+
+// GET ALL
+export const getAllAccounts = async (req: Request, res: Response) => {
+  if (!req.user?.id) {
+    return errorResponse(res, "User belum login");
+  }
+
+  const accounts = await prisma.account.findMany({
+    where: { id: req.user.id },
+  });
+
+  return successResponse(res, "Get all accounts", accounts);
+};
