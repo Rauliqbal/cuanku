@@ -31,6 +31,14 @@ export const createAccount = async (req: Request, res: Response) => {
   return successResponse(res, "Berhasil dibuat", 200);
 };
 
+function serializeBigInt(obj: any) {
+  return JSON.parse(
+    JSON.stringify(obj, (_, value) =>
+      typeof value === "bigint" ? value.toString() : value
+    )
+  );
+}
+
 // GET ALL
 export const getAllAccounts = async (req: Request, res: Response) => {
   if (!req.user?.id) {
@@ -38,8 +46,8 @@ export const getAllAccounts = async (req: Request, res: Response) => {
   }
 
   const accounts = await prisma.account.findMany({
-    where: { id: req.user.id },
+    where: { userId: req.user.id },
   });
 
-  return successResponse(res, "Get all accounts", accounts);
+  return successResponse(res, "Get all accounts", serializeBigInt(accounts));
 };
