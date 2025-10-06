@@ -7,7 +7,6 @@ export const authMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  // const token = req.headers.authorization?.split(" ")[1];
   const token = req.cookies["cuanku_token"];
 
   if (!token) return res.status(401).json({ message: "Token tidak ada" });
