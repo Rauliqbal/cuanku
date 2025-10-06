@@ -51,3 +51,16 @@ export const getAllAccounts = async (req: Request, res: Response) => {
 
   return successResponse(res, "Get all accounts", serializeBigInt(accounts));
 };
+
+// GET DETAIL
+export const getAccountDetails = async (req: Request, res: Response) => {
+  if (!req.user?.id) {
+    return errorResponse(res, "User belum login");
+  }
+
+  const account = await prisma.account.findUnique({
+    where: {
+      id: req.params.id,
+    },
+  });
+};
